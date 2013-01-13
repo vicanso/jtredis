@@ -1,0 +1,18 @@
+{
+  "name" : "jtredis",
+  "description" : "redis client",
+  "version" : "0.0.1",
+  "author" : {
+    "name" : "vicanso 腻味",
+    "email" : "vicansocanbico@gmail.com"
+  },
+  "keywords" : [
+    "redis",
+    "database",
+    "nosql"
+  ],
+  "dependencies" : {
+    "redis" : "latest",
+    "underscore" : "latest"
+  }
+}
