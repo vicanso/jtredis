@@ -1,4 +1,1 @@
-jtredis
-=======
-
-node redis
+# jtredis - 对redis封装了，只是简单的将函数封装，且在调用时判断一个redis是否连接，方法的调用和原来的没有改变
