@@ -17,11 +17,8 @@
   client = jtRedis.getClient('vicanso');
 
   setTimeout(function() {
-    client.set('7897', '123', function(err, data) {
-      return console.dir(err);
-    });
-    return client.get('7897', function(err, data) {
-      return console.dir(data);
+    return client.multi([['get', '123', redis.print], ['set', '234', 'eofaofjeoajfe', redis.print], ['get', '345'], ['get', '456']]).exec(function(err, replies) {
+      return console.dir(replies);
     });
   }, 1000);
 

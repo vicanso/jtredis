@@ -1,3 +1,7 @@
+###*!
+* Copyright(c) 2013 vicanso 腻味
+* MIT Licensed
+###
 
 _ = require 'underscore'
 redis = require 'redis'
@@ -10,7 +14,7 @@ class Client
     @clients = {}
     @redisConfigs = {}
     @isLogger = false
-    @slaveHandleFunctions = 'get strlen exists getbit getrange '.split ' '
+    @slaveHandleFunctions = require('./readcommands').sort()
   ###*
    * setConfig 设置配置信息
    * @param {String, Object} key 配置的key或者{key : value}
@@ -120,14 +124,19 @@ class Client
           connectTotal++
           if connectTotal == redisServerTotal
             self._sortClient name
+            connectTotal = -1
         if config.keepAlive
           setInterval () ->
-            redisClient.info()
+            redisClient.ping()
           , 120 * 1000
         return redisClient
       clients[name] = redisClients
+      _.delay () ->
+        if ~connectTotal
+          self._sortClient name
+      , 5000
     else
-      if redisClients.length != 1 && ~_.indexOf self.slaveHandleFunctions, funcName
+      if redisClients.length != 1 && ~_.indexOf self.slaveHandleFunctions, funcName.toLowerCase(), true
         return self._getSlaveClient name
       else
         return {
