@@ -98,6 +98,7 @@ class Client
           host : uriInfo.hostname
           port : uriInfo.port
           keepAlive : config.keepAlive
+          pwd : config.pwd
         }
       return redisConfig
     else
@@ -125,6 +126,8 @@ class Client
           if connectTotal == redisServerTotal
             self._sortClient name
             connectTotal = -1
+        if config.pwd
+          redisClient.auth config.pwd
         if config.keepAlive
           setInterval () ->
             redisClient.ping()
