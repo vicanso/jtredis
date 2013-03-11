@@ -6,6 +6,8 @@
 _ = require 'underscore'
 redis = require 'redis'
 commands = require './commands'
+commands.push 'on', 'on_connect', 'on_data', 'on_error', 'on_info_cmd', 'on_ready'
+
 logger = console
 noop = () ->
 
@@ -55,7 +57,7 @@ class Client
   ###
   handle : (name,  funcName, args...) ->
     client = @_client name, funcName
-    if @.isLogger
+    if @isLogger
       cbf = _.last args
       if client.index == 0
         cbf._clientDesc = 'client:master'
@@ -189,6 +191,8 @@ class Client
           serializationList.push JSON.stringify arg
     return serializationList.join ','
 
+
+  
 _.each commands, (command) ->
   Client.prototype[command] = Client.prototype[command.toUpperCase()] = (args...) ->
     self = @

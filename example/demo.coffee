@@ -1,6 +1,6 @@
 
 redis = require 'redis'
-jtRedis = require './lib/client'
+jtRedis = require '../lib/client'
 jtRedis.setConfig
   queryTime : true
   redis : 

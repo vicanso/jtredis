@@ -13,7 +13,7 @@
     queryTime: true,
     redis: {
       name: 'vicanso',
-      uri: 'redis://koala:6380',
+      uri: 'redis://127.0.0.1:10010',
       keepAlive: true
     }
   });

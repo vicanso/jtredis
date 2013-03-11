@@ -3,13 +3,13 @@
 
   redis = require('redis');
 
-  jtRedis = require('./lib/client');
+  jtRedis = require('../lib/client');
 
   jtRedis.setConfig({
     queryTime: true,
     redis: {
       name: 'vicanso',
-      uri: 'redis://127.0.0.1:10010,redis://127.0.0.1:10011',
+      uri: 'redis://127.0.0.1:10010',
       keepAlive: true
     }
   });
