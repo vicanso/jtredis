@@ -40,7 +40,7 @@ class Client
    * @param  {String} name 配置redis时的名字
    * @return {[type]} 返回一个client对象
   ###
-  getClient : (name) ->
+  getClient : (name = 'default') ->
     self = @
     client = {}
     _.each commands, (command) ->
@@ -136,6 +136,7 @@ class Client
           , 120 * 1000
         return redisClient
       clients[name] = redisClients
+      clients['default'] ?= redisClients
       _.delay () ->
         if ~connectTotal
           self._sortClient name
