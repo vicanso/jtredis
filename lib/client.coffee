@@ -124,6 +124,7 @@ class Client
       redisClients = _.map redisConfig, (config) ->
         redisClient = redis.createClient config.port, config.host
         redisClient.once 'ready', (err) ->
+          logger.info "redis server #{config.host} #{config.port} is ready!"
           connectTotal++
           if connectTotal == redisServerTotal
             self._sortClient name
