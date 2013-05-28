@@ -18,16 +18,16 @@ class Client
     @isLogger = false
     @slaveHandleFunctions = require('./readcommands').sort()
   ###*
-   * setConfig 设置配置信息
+   * configure 设置配置信息
    * @param {String, Object} key 配置的key或者{key : value}
    * @param {[type]} 配置的值
   ###
-  setConfig : (key, value) ->
+  configure : (key, value) ->
     self = @
     if _.isObject key
       obj = key
       _.each obj, (value, key) ->
-        self.setConfig key, value
+        self.configure key, value
     else if value?
       switch key
         when 'redis'
@@ -222,5 +222,7 @@ LOG_QUERY_TIME = (self) ->
     args.push cbf
     func.apply @, args
   LOG_QUERY_TIME = noop
+
+Client.prototype.setConfig = Client.prototype.configure
 
 module.exports = new Client
