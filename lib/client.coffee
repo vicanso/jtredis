@@ -76,8 +76,9 @@ class Client
     name = config.name
     if name
       delete config.name
-      redisConfigs[name] = config
-      self._client name
+      if !redisConfigs[name]
+        redisConfigs[name] = config
+        self._client name
     return @
   ###*
    * _getRedisConfig 获取redis的配置信息
