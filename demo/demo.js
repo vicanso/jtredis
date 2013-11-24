@@ -8,10 +8,11 @@
   jtRedis = require('../lib/client');
 
   jtRedis.configure({
-    log: true,
+    profiling: true,
     redis: {
       name: 'vicanso',
-      uri: 'redis://127.0.0.1:10010'
+      uri: 'redis://127.0.0.1:10010',
+      pwd: 'MY_REDIS_JENNY_TREE'
     }
   });
 
@@ -19,8 +20,12 @@
 
   client1 = jtRedis.getNewClient('vicanso');
 
-  client.on('log', function(log) {
-    return console.dir("log:" + log);
+  client.on('profiling', function(profiling) {
+    return console.dir(profiling);
+  });
+
+  client1.on('profiling', function(profiling) {
+    return console.dir(profiling);
   });
 
   client.on('error', function(err) {

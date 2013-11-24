@@ -9,7 +9,7 @@ url = require 'url'
 noop = ->
 clientConfigs = null
 clients = {}
-queryLog = ->
+profiling = ->
   sendCommand = redis.RedisClient.prototype.send_command
   redis.RedisClient.prototype.send_command = (command, args, cbf) ->
     if !_.isArray args
@@ -21,17 +21,24 @@ queryLog = ->
         cbf = args.pop()
     cbf ?= noop
     start = process.hrtime()
-    logParams = [command]
-    logParams.push JSON.stringify args
+    params = JSON.stringify args
     cbf = _.wrap cbf, (fn, args...) =>
       hrtime = process.hrtime start
-      logParams.push hrtime[0] * 1000 + GLOBAL.parseFloat (hrtime[1] / 1000000).toFixed 3
+      elapsedTime = hrtime[0] * 1000 + GLOBAL.parseFloat (hrtime[1] / 1000000).toFixed 3
       err = _.first args
       if !err
-        @emit 'log', logParams.join ' '
+        @emit 'profiling', {
+          category : 'handle'
+          method : command
+          params : params
+          date : new Date()
+          elapsedTime : elapsedTime
+        }
       fn.apply null, args
     sendCommand.call @, command, args, cbf
-  queryLog = noop
+  profiling = noop
+
+  
 getConfig = (name) ->
   _.find clientConfigs, (config) ->
     config.name == name
@@ -52,8 +59,8 @@ jtRedis =
       _.each key, (value, key) ->
         jtRedis.configure key, value
     else
-      if key == 'log' && value == true
-        queryLog()
+      if key == 'profiling' && value == true
+        profiling()
       else if key == 'redis'
         if !_.isArray value
           clientConfigs = [value]

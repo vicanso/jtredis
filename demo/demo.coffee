@@ -2,15 +2,18 @@ redis = require 'redis'
 util = require 'util'
 jtRedis = require '../lib/client'
 jtRedis.configure
-  log : true
+  profiling : true
   redis : 
     name : 'vicanso'
     uri : 'redis://127.0.0.1:10010'
+    pwd : 'MY_REDIS_JENNY_TREE'
 
 client = jtRedis.getClient 'vicanso'
 client1 = jtRedis.getNewClient 'vicanso'
-client.on 'log', (log) ->
-  console.dir "log:#{log}"
+client.on 'profiling', (profiling) ->
+  console.dir profiling
+client1.on 'profiling', (profiling) ->
+  console.dir profiling
 client.on 'error', (err) ->
 	console.error "err:#{err}"
 client.on 'message', (channel, message) ->
